@@ -223,7 +223,7 @@ void Sweep_And_Save(int i, float sweep_width, int segments, string out_path, con
 
 	Faces_to_Obj(vertices, faces, su::fmt("{}/model{}.obj", { out_path , i }));
 
-
+	ofstream(su::fmt("{}/DONE{}.txt", { out_path , i }),ios::out);
 }
 
 int main(int argc, char* argv[])
