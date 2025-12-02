@@ -319,44 +319,45 @@ int main(int argc, char* argv[])
 	const vector<vector<v3_f>> curve_list = Draw_Line(unit_table, stretch);
 	
 
-	string obj_content;
-	obj_content.reserve(151818462);
-	for (const vector<v3_f>& curve: curve_list) {
-		for (const v3_f& p: curve) {
-			obj_content += su::fmt("v {} {} {}\n", {p.x,p.y,p.z});
-		}
-	}
-	int point_id = 1;
+	//string obj_content;
+	//obj_content.reserve(151818462);
+	//for (const vector<v3_f>& curve: curve_list) {
+	//	for (const v3_f& p: curve) {
+	//		obj_content += su::fmt("v {} {} {}\n", {p.x,p.y,p.z});
+	//	}
+	//}
+	//int point_id = 1;
 
-	for (const vector<v3_f>& curve : curve_list) {
-		obj_content += "l ";
-		for (const v3_f& p : curve) {
-			obj_content+= su::fmt("{} ", { point_id });
-			point_id++;
-		}
-		obj_content += "\n";
-
-	}
-	ofstream fout("./model.obj", ios::out | ios::binary);
-	fout.write(obj_content.c_str(), obj_content.size());
-	fout.close();
-
-	return 0;
-
-
-
-	//vector<std::thread> thread_list;
-	//for (int i = 0; i < curve_list.size();i++) {
-
-	//	thread_list.push_back(std::thread(Sweep_And_Save,i, sweep_width, segments, out_path, std::ref(curve_list)));
+	//for (const vector<v3_f>& curve : curve_list) {
+	//	obj_content += "l ";
+	//	for (const v3_f& p : curve) {
+	//		obj_content+= su::fmt("{} ", { point_id });
+	//		point_id++;
+	//	}
+	//	obj_content += "\n";
 
 	//}
-	//for (int i = 0; i < curve_list.size(); i++) {
+	//ofstream fout("./model.obj", ios::out | ios::binary);
+	//fout.write(obj_content.c_str(), obj_content.size());
+	//fout.close();
 
-	//	thread_list[i].join();
-	//}
+	//return 0;
 
-	//std::cout << "DONE" << endl;
+
+
+	vector<std::thread> thread_list;
+	for (int i = 0; i < curve_list.size();i++) {
+
+		thread_list.push_back(std::thread(Sweep_And_Save,i, sweep_width, segments, out_path, std::ref(curve_list)));
+
+	}
+	for (int i = 0; i < curve_list.size(); i++) {
+
+		thread_list[i].join();
+	}
+
+	std::cout << "DONE" << endl;
+
 
 
 	return 0;
